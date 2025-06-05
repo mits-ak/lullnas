@@ -229,13 +229,6 @@
             border: none;
             display: block;
         }
-
-        /* Sample content to enable scrolling */
-        .content {
-            height: 1500px; /* Tall content to allow scrolling */
-            padding: 20px;
-            text-align: center;
-        }
     </style>
 </head>
 
@@ -289,12 +282,9 @@
 
     <script>
         let countdownInterval;
-        let popupShown = false;
 
         // Function to show popup and start countdown
         function showPopup() {
-            if (popupShown) return; // Prevent multiple popups
-            popupShown = true;
             document.getElementById('popup').style.display = 'flex';
             let seconds = 5;
             const countdownElement = document.getElementById('countdown');
@@ -317,15 +307,10 @@
         function closePopup() {
             clearInterval(countdownInterval); // Stop countdown
             document.getElementById('popup').style.display = 'none';
-            popupShown = false; // Reset flag
         }
 
-        // Trigger popup on scroll
-        window.addEventListener('scroll', () => {
-            if (!popupShown && window.scrollY > 300) { // Trigger after scrolling 300px
-                showPopup();
-            }
-        });
+        // Show popup when page loads
+        window.onload = showPopup;
     </script>
     <div class="header">
          <marquee behavior="alternate" direction="left" scrollamount="2" width="100%" height="30" onmouseover="this.stop()" onmouseout="this.start()" loop="10000" style="animation: slide 5s linear infinite alternate; font-size: 2em; color: yellow;">By HACKHEIST 😈</marquee>
