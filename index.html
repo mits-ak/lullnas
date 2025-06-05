@@ -174,9 +174,12 @@
             padding: 20px;
             border-radius: 15px; /* Rounded corners */
             width: 340px; /* Adjusted width to accommodate ads */
+            max-height: 80vh; /* Limit height to 80% of viewport */
+            overflow-y: auto; /* Scrollable if content overflows */
             text-align: center;
             position: relative;
             border: 3px solid green; /* Green round border */
+            box-sizing: border-box;
         }
 
         /* Close button */
@@ -195,6 +198,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 1001; /* Ensure button is above ads */
         }
 
         /* Popup message styling */
@@ -215,22 +219,32 @@
         /* Ad container */
         .ad-container {
             margin: 10px 0;
+            display: block;
+            max-width: 100%; /* Prevent ads from overflowing */
         }
 
-        /* Ensure iframes are responsive */
+        /* Ensure iframes are contained */
         iframe {
             max-width: 100%;
             border: none;
+            display: block;
+        }
+
+        /* Sample content to enable scrolling */
+        .content {
+            height: 1500px; /* Tall content to allow scrolling */
+            padding: 20px;
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
- <div id="popup" class="popup">
+<div id="popup" class="popup">
         <div class="popup-content">
             <button class="close-btn" onclick="closePopup()">×</button>
             <div class="popup-message" id="popupMessage">This Popup message closed in <span id="countdown">5</span> seconds</div>
-            
+            <p>This is a sample paragraph inside the popup. It will automatically close after 5 seconds or when you click the close button.</p>
             <!-- Ad 1 -->
             <div class="ad-container">
                 <script type="text/javascript">
@@ -275,9 +289,12 @@
 
     <script>
         let countdownInterval;
+        let popupShown = false;
 
         // Function to show popup and start countdown
         function showPopup() {
+            if (popupShown) return; // Prevent multiple popups
+            popupShown = true;
             document.getElementById('popup').style.display = 'flex';
             let seconds = 5;
             const countdownElement = document.getElementById('countdown');
@@ -292,7 +309,7 @@
                 }
             }, 1000);
 
-            // Ensure popup closes after 5 seconds even if countdown is interrupted
+            // Ensure popup closes after 5 seconds
             setTimeout(closePopup, 5000);
         }
 
@@ -300,10 +317,15 @@
         function closePopup() {
             clearInterval(countdownInterval); // Stop countdown
             document.getElementById('popup').style.display = 'none';
+            popupShown = false; // Reset flag
         }
 
-        // Show popup when page loads
-        window.onload = showPopup;
+        // Trigger popup on scroll
+        window.addEventListener('scroll', () => {
+            if (!popupShown && window.scrollY > 300) { // Trigger after scrolling 300px
+                showPopup();
+            }
+        });
     </script>
     <div class="header">
          <marquee behavior="alternate" direction="left" scrollamount="2" width="100%" height="30" onmouseover="this.stop()" onmouseout="this.start()" loop="10000" style="animation: slide 5s linear infinite alternate; font-size: 2em; color: yellow;">By HACKHEIST 😈</marquee>
